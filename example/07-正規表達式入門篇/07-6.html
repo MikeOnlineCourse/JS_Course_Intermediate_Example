@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>頭尾^$</title>
+</head>
+<body>
+    
+    <script>
+        var strArr = ["airline", "banner", "apple", "cat", "dog", "applepay", "linerair", "airplane", "wayair", "habit"];
+        var regexStart = /^air/;
+        var strfilter = strArr.filter(function(item){
+            return  regexStart.test(item);
+        })
+        console.log("Start:", strfilter);
+
+
+        var regexEnd = /er$/;
+        var endfilter = strArr.filter(function(item){
+            return  regexEnd.test(item);
+        })
+        console.log("End:", endfilter);
+        
+
+        var regexMid = /^a.*e$/;
+        var midfilter = strArr.filter(function(item){
+            return  regexMid.test(item);
+        })
+        console.log("Mid:", midfilter);
+    
+    
+    </script>
+
+
+
+</body>
+</html>

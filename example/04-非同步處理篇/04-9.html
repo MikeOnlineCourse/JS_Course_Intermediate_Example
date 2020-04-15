@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>instagram hashtag 搜尋頁</title>
+    <link rel="stylesheet" href="./css/normalize.css">
+    <link rel="stylesheet" href="./css/04-9.css">
+</head>
+<body>
+    <div id="app">
+            <!-- seachOk -->
+        <div id="bar" class="">
+            <input class="seachBar" type="text" placeholder="輸入想找的 instagram 圖片">
+        </div>
+
+        <div class="imgBox">
+            <div class="imgdiv"></div>
+        </div>
+
+        <a id="more">More</a>
+      
+        <!-- pop照片 -->
+        <div class="pop">
+            <img class="popImg" src="" alt="">
+        </div>
+
+        <!-- loading -->
+        <div class="loading">
+            <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+    <script src="./lib/BindValue.js"></script>
+    <script>
+        window.onload = function(){
+
+            var seachBar = document.getElementsByClassName('seachBar')[0];
+            var moreBtn = document.getElementById('more');
+            var loadingPage = document.getElementsByClassName("loading")[0];
+            var popPage = document.getElementsByClassName("pop")[0];
+
+            var keyword = "";      //搜尋的文字
+            var edges = null;      //搜尋出來的照片
+            var baseUrl = "";      //api 的url
+            var img_html = "";     //圖片列表
+            var Loading = {
+                isOpem: false      //開啟loading
+            }
+            var pageInfo = {
+                has_next_page: false,  //是否還有下一頁
+                end_cursor: ""         //最後一頁的hash
+            }
+            var photoTag = {
+                pages: [],        //存取目前有的照片
+            }
+
+            seachBar.addEventListener('keyup', function(e){
+                if(e.keyCode !== 13) return;
+                if(keyword !== this.value){
+                    resetData();
+                }
+                keyword = this.value;
+                SearchHashTag(this.value);
+            })
+
+            moreBtn.addEventListener("click", function(){
+                SearchHashTag(keyword);
+            })
+
+            function SearchHashTag(keyword){
+
+                Loading.isOpem = true;
+                baseUrl = 'https://www.instagram.com/explore/tags/' + encodeURI(keyword) + '/?__a=1'
+
+                if(pageInfo.has_next_page) {
+                    baseUrl += '&max_id=' + pageInfo.end_cursor;
+                }
+
+                var arr = [];
+                axios.get(baseUrl).then(function(res) {
+                    pageInfo = res.data.graphql.hashtag.edge_hashtag_to_media['page_info'];                    
+                    edges = res.data.graphql.hashtag.edge_hashtag_to_media['edges'];
+
+                    photoTag.pages = edges;
+                    Loading.isOpem = false;
+                })
+                .catch(function(err) {
+                    console.error(err);
+                })
+            }
+
+            // 重製資料
+            function resetData(){
+                img_html = '';
+                photoTag.pages = [];
+                document.getElementsByClassName("imgBox")[0].innerHTML = '';
+                document.getElementById("bar").classList.remove('seachOk');
+                moreBtn.style.display = 'none';
+            }
+
+            //如果資料有變動就重新更新畫面
+            BindValue(photoTag, 'pages', function(val){
+                
+                val.forEach(function(item, idx){
+                    img_html += '<div class="imgdiv" style="background-image: url(' + item.node.display_url + ')"></div>';
+                })
+
+                document.getElementsByClassName("imgBox")[0].innerHTML = img_html;
+
+                var imgdivArr = document.getElementsByClassName('imgdiv');
+                
+                for(var s = 0; s < imgdivArr.length; s++){
+                    imgdivArr[s].addEventListener("click", function(){
+                        var img = this.style.backgroundImage.replace('url("', "").replace('")', "");
+                        popPage.style.display = "flex";
+                        document.getElementsByClassName("popImg")[0].src = img;
+                    })
+                }
+
+                if(val.length!==0){
+                    document.getElementById("bar").classList.add('seachOk');
+                    document.getElementById("more").style.display = 'block';
+                    document.getElementsByClassName("imgBox")[0].style.display = 'flex';
+                }
+                
+                if(!pageInfo.has_next_page) {
+                    moreBtn.style.display = 'none';
+                }
+
+            })
+
+            // loading資料變動
+            BindValue(Loading, 'isOpem', function(bool){
+                if(bool){
+                    loadingPage.style.display = 'flex';
+                }else{
+                    loadingPage.style.display = 'none';
+                }
+            })
+
+            popPage.addEventListener("click", function(){
+                this.style.display = "none";
+            });
+
+        }
+    </script>
+
+</body>
+</html>

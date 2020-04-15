@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>instagram hashtag 搜尋頁</title>
+    <link rel="stylesheet" href="./css/normalize.css">
+    <link rel="stylesheet" href="./css/04-9.css">
+</head>
+<body>
+    <div id="app">
+            <!-- seachOk -->
+        <div id="bar" class="">
+            <input class="seachBar" type="text" placeholder="輸入想找的 instagram 圖片">
+        </div>
+
+        <div class="imgBox">
+            <!-- <div class="imgdiv" style="background-image: url('+imgurl+')"></div> -->
+        </div>
+
+        <a id="more">More</a>
+      
+        <!-- pop照片 -->
+        <div class="pop">
+            <img class="popImg" src="" alt="">
+        </div>
+
+        <!-- loading -->
+        <div class="loading">
+            <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+    <script src="./lib/BindValue.js"></script>
+    <script>
+        window.onload = function(){
+
+            var seachBar = document.getElementsByClassName('seachBar')[0];
+            var moreBtn = document.getElementById('more');
+            var loadingPage = document.getElementsByClassName("loading")[0];
+            var popPage = document.getElementsByClassName("pop")[0];
+
+            var keyword = "";          // 搜尋的文字
+            var edges = null;          // 搜尋出來的照片
+            var baseUrl = "";          // api 的url
+            var img_html = "";         // 圖片列表
+            var Loading = {
+                isOpem: false          // 開啟loading
+            }
+            var pageInfo = {
+                has_next_page: false,  // 是否還有下一頁
+                end_cursor: ""         // 最後一頁的hash
+            }
+            var photoTag = {
+                pages: [],             // 存取目前有的照片
+            }
+            
+            // https://www.instagram.com/explore/tags/{標籤}/?__a=1&max_id={最後一頁的hash}
+            // encodeURI(字串編碼) & decodeURI(轉回字串)
+
+            // graphql.hashtag.edge_hashtag_to_media['page_info']; // 所有資料              
+            // graphql.hashtag.edge_hashtag_to_media['edges']; //所有照片
+
+
+            //鍵盤按下
+            seachBar.addEventListener('keyup', function(e){
+                
+            })
+
+            //鍵盤按下
+            moreBtn.addEventListener("click", function(){
+                
+            })
+
+            //開始搜尋圖片
+            function SearchHashTag(keyword){
+                
+            }
+
+            // 重製資料
+            function resetData(){
+                img_html = '';
+                photoTag.pages = [];
+                document.getElementsByClassName("imgBox")[0].innerHTML = '';
+                document.getElementById("bar").classList.remove('seachOk');
+                moreBtn.style.display = 'none';
+            }
+
+            //如果資料有變動就重新更新畫面
+            BindValue(photoTag, 'pages', function(val){
+                
+            })
+
+            // loading資料變動
+            BindValue(Loading, 'isOpem', function(bool){
+                
+            })
+
+
+        }
+    </script>
+
+</body>
+</html>

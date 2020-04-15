@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>非同步資料動態渲染列表實作 (GET) </title>
+    <link rel="stylesheet" href="./css/normalize.css">
+    <link rel="stylesheet" href="./css/04-6.css">
+</head>
+<body>
+    <!-- https://www.mocky.io/ -->
+
+    <div id="app">
+        
+        <img id="logo" src="./images/logo2.png" alt="">
+        
+        <select id="city" name="city">
+            <!-- <option value=""></option> -->
+        </select>
+        
+        <select id="area" name="area">
+            <!-- <option value=""></option> -->
+        </select>
+        
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+    <script>
+        window.onload = function(){
+
+            var city = [];     //儲存城市
+            var area = [];     //儲存鄉鎮
+            var html = "";     //城市下拉
+            var areahtml = ""; //鄉鎮下拉
+
+            //拉取鄉鎮資料
+            axios.get("http://www.mocky.io/v2/5cc3f5723400005d00765480")
+            .then(axiosCallBack)
+            .catch(function (error) {
+                console.log(error);
+            })
+            //拉取資料完成
+            function axiosCallBack(res){
+                city = res.data.twzip.city;
+                renderCity(city);
+                SelectChange();
+            }
+            //產生城市下拉列表
+            function renderCity(city){
+                city.forEach(function(item){
+                    html += '<option value="'+item.name+'">'+item.name+'</option>';
+                });
+                document.getElementById('city').innerHTML = html;
+                areaChange();
+            }
+            //執行抓取新的鄉鎮列表
+            function areaChange(){
+                var cit = document.getElementById('city').value;
+                var area = city.filter(function(item){
+                    return item.name === cit;
+                })
+                renderArea(area[0].area);     
+            }
+
+            //產生鄉鎮下拉列表
+            function renderArea(arr){
+                areahtml = '';
+                arr.forEach(function(item){
+                    areahtml += '<option value="'+item.name+'">'+item.name+'</option>';
+                })
+                document.getElementById('area').innerHTML = areahtml;
+            }
+
+            //監聽程式下拉列表 change 事件
+            function SelectChange(){
+                document.getElementById('city').addEventListener("change", function(){
+                    areaChange();
+                })
+            }
+
+        }
+
+    </script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>跨網域存取CORS</title>
+</head>
+<body>
+    
+
+    <!-- https://alerts.ncdr.nat.gov.tw/RSS.aspx -->
+    <!-- https://alerts.ncdr.nat.gov.tw/JSONAtomFeeds.ashx -->
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+    <script>
+        
+        // 可以使用 https://cors-anywhere.herokuapp.com/{api url}
+        // 但是這只可以拿來測試，不可以真的拿來傳送敏感資料
+
+        var proxy = "https://cors-anywhere.herokuapp.com/";
+        var url = "https://www.vscinemas.com.tw/VsWeb/api/GetLstDicCinema";
+        
+        
+    </script>
+</body>
+</html>
